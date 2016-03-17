@@ -1,0 +1,8 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Python loops
+##
+
+for i in xrange(20):
+    # echo "--=## $<i> ##=--"
+

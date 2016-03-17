@@ -1,0 +1,14 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Counter example!! This shows a limitation in Caerbannog.
+##
+## You can't make any reference to Bash variables from a
+## Python line inside a Bash block (if, for, while)
+##
+
+import sys
+
+# for i in $(seq 3); do #
+    print "Killer bunny!!" + $<i>
+# done #
+

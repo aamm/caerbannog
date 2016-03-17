@@ -1,0 +1,25 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## And now for something completely new...
+##
+
+##
+## A Python variable
+##
+
+var1 = "rabbit"
+
+##
+## A Bash variable
+##
+
+# var2="grenade"
+
+##
+## Accessing a Python variable from Bash and vice versa
+##
+
+# echo "Caerbannog is a vicious $<var1>."
+print "Use the " + $<var2> + "!!"
+
+

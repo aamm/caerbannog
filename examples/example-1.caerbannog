@@ -1,0 +1,11 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## And now for something completely new...
+##
+
+print "This is python"
+
+# echo "And this is bash"
+
+## And this is a comment.
+

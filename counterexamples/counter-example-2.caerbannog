@@ -1,0 +1,20 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Counter example!! This shows a limitation in Caerbannog.
+##
+## You can only have a single level of environment switch in
+## loops. In the example bellow, the nested blocks start with
+## a Bash block, which has a Python block, which in turn try
+## to run Bash code.
+##
+## Indentation is also a problem here.
+##
+
+import sys
+
+# for i in $(seq 3); do #
+    for i in xrange(10):
+# echo "===> $<i>"
+     print "a"
+# done #
+

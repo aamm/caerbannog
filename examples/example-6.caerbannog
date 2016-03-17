@@ -1,0 +1,15 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Bash loop
+##
+
+import sys
+
+# for i in $(seq 3); do #
+    print "Killer bunny!!"
+    for j in xrange(5):
+        for k in xrange(j + 1):
+            sys.stdout.write("Help! ")
+        print ""
+# done #
+

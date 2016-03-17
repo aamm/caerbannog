@@ -1,0 +1,12 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Python if
+##
+
+import random
+
+if random.choice([True, False]):
+    # echo "The rabbit killed you."
+else:
+    # echo "You survived."
+

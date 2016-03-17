@@ -1,4 +1,4 @@
-# caerbannog
+# Caerbannog
 
 Write shell scripts using Python. Or is it Python using shell?
 
@@ -54,8 +54,14 @@ The generated script process and the Bash process communicate through two named 
 
 # Limitations
 
+See the counter examples for more information.
+
 ## Accessing Bash variables from Python code inside of a Bash block
 
 ## Multiple levels of context switching in nested blocks
 
 ## Concurrency
+
+You may have several threads on the Python world, and several processes on the Bash world, but only one thread or
+process at a time can access the other world at a time. Concurrent accesses to the other world may have non-
+deterministic results which includes deadlocks.

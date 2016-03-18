@@ -10,8 +10,6 @@
 ## Indentation is also a problem here.
 ##
 
-import sys
-
 # for i in $(seq 3); do #
     for i in xrange(10):
 # echo "===> $<i>"

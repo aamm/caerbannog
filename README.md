@@ -58,7 +58,28 @@ See the counter examples for more information.
 
 ## Accessing Bash variables from Python code inside of a Bash block
 
+This limitation is illustrated in the counter example 1:
+
+    # for i in $(seq 3); do #
+        print "Killer bunny!!" + $<i>
+    # done #
+
+The code above will block. Until we fix this bug the workaround for the case above is to use the loop to build an array
+in Bash, which after the loop is read by Python. This workaround has the serious disadvantage of being less efficient
+for large sequences.
+
 ## Multiple levels of context switching in nested blocks
+
+This limitation is illustrated in the counter example 2:
+
+    # for i in $(seq 3); do #
+        for i in xrange(10):
+    # echo "===> $<i>"
+         print "a"
+    # done #
+
+In the code above we are trying to switch worlds twice in the same nesting structure: first from Bash to Python on
+line 1, and then from Python back to Bash on line 2.
 
 ## Concurrency
 

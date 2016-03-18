@@ -6,8 +6,6 @@
 ## Python line inside a Bash block (if, for, while)
 ##
 
-import sys
-
 # for i in $(seq 3); do #
     print "Killer bunny!!" + $<i>
 # done #

@@ -35,11 +35,13 @@ def convert_python_var_references(code_line):
     :return: The Python line with calls to Bash variables converted into communication with the Bash process
     """
     match = variable_reference_regex.search(code_line)
+    new_vars_code = ""
     while match:
         var_name = match.group('var_name')
         code_line = code_line[:match.start()] + "\" + str(" + var_name + ") + \"" + code_line[match.end():]
+        new_vars_code += var_name + "=\\\"\" + str(" + var_name + ") + \"\\\"; "
         match = variable_reference_regex.search(code_line)
-    return code_line
+    return new_vars_code + code_line
 
 
 def convert_bash_var_references(code_line):
@@ -57,8 +59,8 @@ def convert_bash_var_references(code_line):
         variable_fetch_script += indentation + "process.stdin.write(\"echo \\\"" + var_name + "=$" + var_name + \
                                                "\\\" > \" + bash_to_p_fifo + \"\\n\")\n"
         variable_fetch_script += indentation + "bash_var_sem.acquire()\n"
-        variable_fetch_script += indentation + var_name + " = bash_vars[\"" + var_name + "\"]\n"
-        code_line = code_line[:match.start()] + "str(" + var_name + ")" + code_line[match.end():]
+        variable_fetch_script += indentation + var_name + " = str(bash_vars[\"" + var_name + "\"])\n"
+        code_line = code_line[:match.start()] + var_name + code_line[match.end():]
         match = variable_reference_regex.search(code_line)
     return variable_fetch_script + code_line
 
@@ -198,4 +200,4 @@ with open(script_file_name, "w") as script_file:
 
 subProcess = subprocess.Popen(["python", script_file_name], stdin=subprocess.PIPE)
 subProcess.communicate(input="exit 0")
-os.remove(script_file_name)
+# os.remove(script_file_name)

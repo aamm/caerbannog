@@ -28,18 +28,47 @@ Lines that do not start with a sharp character is executed as Python. Lines with
 
 Bash scripts are very powerful and expressive. A few bash lines can be used to start new processes, connect processes
 using pipes, control the operating system, create new users, only to name a few possible usages. But shell scripts tend
-to become hard to read as they grow. Also, it is common for shell scripts to have to rely on tools to do most of the
-algorithmically complex functions such as parsing a JSON file.
+to become hard to read as they grow. Also, it is common for shell scripts to have to rely on external tools to do most
+of the algorithmically complex functions such as parsing a JSON file.
 
-Python, on the other hand, has a cleaner, more robust, OOP programming model. But, in order to perform simple OS actions
-such as creating a new user or installing something using apt-get, Python needs to rely on native calls which end up
-polluting the code with calls such as:
+Python, on the other hand, has a cleaner, more robust, OOP programming model. It can talk with a number of databases.
+Python has a huge API library with powerful functions ranging from creating images to scientific computing. But, in
+order to perform simple OS actions such as creating a new user or installing something using apt-get, Python needs to
+rely on native calls which end up polluting the code with calls such as:
 
     subprocess.Popen(["apt-get", "install", "-y", "git"])
 
 Another limitation of sprinkling such calls all over a Python code is that each call is a new OS process with a brand
 new environment. So we cannot define shell variables that are later read using the $VARIABLE syntax. Neither we can
 cd to a directory and call the following command from the same directory.
+
+When we want to automate some Unix os MacOS processes we often see our selves first learning how to do the process
+manually using Bash (typically). Then usually we try to turn the history of commands into a shell script and this is
+where Caerbannog can help.
+
+Instead of using Bash for programming, you can use Python and still keep your Bash lines readable and maintainable.
+
+# Syntax
+
+## References to variables in the other world
+
+There really are two disjoint worlds: Python and Bash. For code in one of the worlds to access variables in the other
+one, you should use the same syntax.
+
+    # echo $<pythonvar>
+    print $<bashvar>
+
+In Bash all Python variable references are replaced by the string value of the Python variable. Then if the value of
+pythonvar above is "a b c" the first line of code above is replaced with
+
+    echo a b c
+
+In the Python world all Bash variable references are replaced with the string value of the variable in Bash.
+
+Each explicit call to a variable from the Bash environment creates a variable in the Python environment. Therefore
+you can still refer to the variable in Python although any change in the original variable in Bash will be not
+automatically propagated to the copy in Python. The exact same behavior takes place when Bash code accesses
+Python variables. Run example 7 to see this mechanism in action.
 
 # How does it work?
 

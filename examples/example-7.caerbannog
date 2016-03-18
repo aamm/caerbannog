@@ -1,0 +1,28 @@
+#!/usr/bin/env python ../caerbannog.py
+##
+## Variable copy and update between Python and Bash
+##
+
+##
+## Bash variables are copied to the Python environment
+## but are only updated with the new value in Bash when
+## there is another explicit reference to the variable
+## in Bash
+##
+
+# message="Value 1 - Bash"
+print $<message>
+print message
+# message="Value 2 - Bash"
+print message
+print $<message>
+print message
+
+text = "Value 1 - Python"
+# echo $<text>
+# echo $text
+text = "Value 2 - Python"
+# echo $text
+# echo $<text>
+# echo $text
+

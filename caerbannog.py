@@ -54,7 +54,8 @@ def convert_bash_var_references(code_line):
         var_name = match.group('var_name')
         indentation = indentation_regex.search(code_line).group('indent')
         variable_fetch_script += indentation + var_name + " = None\n"
-        variable_fetch_script += indentation + "process.stdin.write(\"echo \\\"" + var_name + "=$" + var_name + "\\\" > \" + bash_to_p_fifo + \"\\n\")\n"
+        variable_fetch_script += indentation + "process.stdin.write(\"echo \\\"" + var_name + "=$" + var_name + \
+                                               "\\\" > \" + bash_to_p_fifo + \"\\n\")\n"
         variable_fetch_script += indentation + "bash_var_sem.acquire()\n"
         variable_fetch_script += indentation + var_name + " = bash_vars[\"" + var_name + "\"]\n"
         code_line = code_line[:match.start()] + "str(" + var_name + ")" + code_line[match.end():]
@@ -159,8 +160,12 @@ with open(script_file_name, "w") as script_file:
                         nested_python_script += "    f.write(\"EOF\\n\")\n"
                         nested_python_script += "    f.close()\n"
                         nested_python_script += "\n"
-                        nested_python_script += "process.stdin.write(\"echo \\\"" + callback_function_name + "\\\" > \" + bash_to_p_fifo + \"\\n\")\n"
-                        nested_python_script += "process.stdin.write(\"while true; do read var_name < \" + p_to_bash_fifo + \"; ( [ \\\"x$var_name\\\" = \\\"xEOF\\\" ] || [ \\\"x$var_name\\\" = \\\"x\\\" ] ) && break; echo -n \\$$var_name > \" + bash_to_p_fifo + \"; done \\n\")\n"
+                        nested_python_script += "process.stdin.write(\"echo \\\"" + callback_function_name + "\\\" >" \
+                                                " \" + bash_to_p_fifo + \"\\n\")\n"
+                        nested_python_script += "process.stdin.write(\"while true; do read var_name < \" + " \
+                                                "p_to_bash_fifo + \"; ( [ \\\"x$var_name\\\" = \\\"xEOF\\\" ] || " \
+                                                "[ \\\"x$var_name\\\" = \\\"x\\\" ] ) && break; echo -n \\$$var_name " \
+                                                "> \" + bash_to_p_fifo + \"; done \\n\")\n"
                         nested_python_script += "\n"
                         script_file.write(nested_python_script)
                         nested_python_script = ""
@@ -176,7 +181,7 @@ with open(script_file_name, "w") as script_file:
                 trimmedLine = trimmedLine.replace("\"", "\\\"")
                 linePrefix = line[0:line.index("#")]
                 script_file.write(linePrefix + "process.stdin.write(\"" + convert_python_var_references(trimmedLine) +
-                                 "\\n\")\n")
+                                  "\\n\")\n")
         else:
             #
             # Python line

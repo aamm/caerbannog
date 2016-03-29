@@ -6,23 +6,40 @@ Write shell scripts using Python. Or is it Python using shell?
 
 Here is the example 1, found in the project's repository:
 
-    #!/usr/bin/env python ../caerbannog.py
-    ##
-    ## And now for something completely new...
-    ##
+```python
+#!/usr/bin/env python ../caerbannog.py
+print "This is python"
+# echo "And this is bash"
+## And this is a comment.
+```
 
-    print "This is python"
+The output will be:
 
-    # echo "And this is bash"
-
-    ## And this is a comment.
+```
+This is python
+And this is bash
+```
 
 The first line is the shebang telling the Python environment to use the Caerbannog script to interpret the script you
-wrote.
+wrote. Lines that do not start with a sharp character is executed as Python. Lines with a single sharp are executed as Bash. All lines starting with two sharp characters are comments that will be simply ignored.
 
-All lines starting with two sharp characters are comments that will be simply ignored.
+You can access variables from Python on Bash and from Bash on Python:
 
-Lines that do not start with a sharp character is executed as Python. Lines with a single sharp are executed as Bash.
+```python
+#!/usr/bin/env python ../caerbannog.py
+
+python_var = "So does Python."
+# bash_var="Bash rocks."
+print $<bash_var>
+# echo $<python_var>
+```
+
+The output will be:
+
+```
+Bash rocks.
+So does Python.
+```
 
 # Why?
 
@@ -36,7 +53,9 @@ Python has a huge API library with powerful functions ranging from creating imag
 order to perform simple OS actions such as creating a new user or installing something using apt-get, Python needs to
 rely on native calls which end up polluting the code with calls such as:
 
-    subprocess.Popen(["apt-get", "install", "-y", "git"])
+```python
+subprocess.Popen(["apt-get", "install", "-y", "git"])
+```
 
 Another limitation of sprinkling such calls all over a Python code is that each call is a new OS process with a brand
 new environment. So we cannot define shell variables that are later read using the $VARIABLE syntax. Neither we can
@@ -55,13 +74,17 @@ Instead of using Bash for programming, you can use Python and still keep your Ba
 There really are two disjoint worlds: Python and Bash. For code in one of the worlds to access variables in the other
 one, you should use the same syntax.
 
-    # echo $<pythonvar>
-    print $<bashvar>
+```python
+# echo $<pythonvar>
+print $<bashvar>
+```
 
 In Bash all Python variable references are replaced by the string value of the Python variable. Then if the value of
 pythonvar above is "a b c" the first line of code above is replaced with
 
-    echo a b c
+```shell
+echo a b c
+```
 
 In the Python world all Bash variable references are replaced with the string value of the variable in Bash.
 
@@ -89,9 +112,11 @@ See the counter examples for more information.
 
 This limitation is illustrated in the counter example 1:
 
-    # for i in $(seq 3); do #
-        print "Killer bunny!!" + $<i>
-    # done #
+```python
+# for i in $(seq 3); do #
+    print "Killer bunny!!" + $<i>
+# done #
+```
 
 The code above will block. Until we fix this bug the workaround for the case above is to use the loop to build an array
 in Bash, which after the loop is read by Python. This workaround has the serious disadvantage of being less efficient
@@ -101,11 +126,13 @@ for large sequences.
 
 This limitation is illustrated in the counter example 2:
 
-    # for i in $(seq 3); do #
-        for i in xrange(10):
-    # echo "===> $<i>"
-         print "a"
-    # done #
+```python
+# for i in $(seq 3); do #
+    for i in xrange(10):
+# echo "===> $<i>"
+     print "a"
+# done #
+```
 
 In the code above we are trying to switch worlds twice in the same nesting structure: first from Bash to Python on
 line 1, and then from Python back to Bash on line 2.
